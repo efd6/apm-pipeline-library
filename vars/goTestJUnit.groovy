@@ -27,7 +27,13 @@ def call(Map args = [:]) {
 
   log(level: 'INFO', text: 'Running Go test an generating JUnit output')
 
-  withGoEnv(version: version, pkgs: ["gotest.tools/gotestsum"]){
-    cmd(label: 'Running Go tests' , script: "gotestsum --format testname --junitfile ${output} -- ${options}")
+  def location = pwd(tmp: true)
+  dir(location) {
+    writeFile(file: 'go.mod', text: libraryResource('go-test-junit/go.mod'))
+    writeFile(file: 'go.mod', text: libraryResource('go-test-junit/go.sum'))
+  }
+  withGoEnv(version: version]){
+
+    cmd(label: 'Running Go tests' , script: "go run -modfile=${location}/go.mod gotest.tools/gotestsum --format testname --junitfile ${output} -- ${options}")
   }
 }
