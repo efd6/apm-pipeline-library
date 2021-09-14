@@ -32,8 +32,7 @@ def call(Map args = [:]) {
     writeFile(file: 'go.mod', text: libraryResource('go-test-junit/go.mod'))
     writeFile(file: 'go.mod', text: libraryResource('go-test-junit/go.sum'))
   }
-  withGoEnv(version: version]){
-
+  withGoEnv(version: version){
     cmd(label: 'Running Go tests' , script: "go run -modfile=${location}/go.mod gotest.tools/gotestsum --format testname --junitfile ${output} -- ${options}")
   }
 }
